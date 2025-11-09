@@ -1,0 +1,8 @@
+compatibility_date = "2025-10-02"
+main = ".generated/workers.ts"
+name = "cloesce-demo"
+
+[[d1_databases]]
+binding = "db"
+database_id = "..."
+database_name = "cloesce_demo"

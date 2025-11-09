@@ -1,0 +1,223 @@
+{
+  "hash": 2490769406,
+  "models": {
+    "Course": {
+      "hash": 2772395692,
+      "name": "Course",
+      "primary_key": {
+        "name": "id",
+        "cidl_type": "Integer"
+      },
+      "attributes": [
+        {
+          "hash": 1153465351,
+          "value": {
+            "name": "name",
+            "cidl_type": "Text"
+          },
+          "foreign_key_reference": null
+        },
+        {
+          "hash": 3027801371,
+          "value": {
+            "name": "credits",
+            "cidl_type": "Integer"
+          },
+          "foreign_key_reference": null
+        },
+        {
+          "hash": 2342949065,
+          "value": {
+            "name": "level",
+            "cidl_type": "Integer"
+          },
+          "foreign_key_reference": null
+        }
+      ],
+      "navigation_properties": [
+        {
+          "hash": 275579005,
+          "var_name": "departments",
+          "model_name": "Department",
+          "kind": {
+            "ManyToMany": {
+              "unique_id": "CoursesDepartments"
+            }
+          }
+        },
+        {
+          "hash": 3913606830,
+          "var_name": "ucores",
+          "model_name": "UCore",
+          "kind": {
+            "ManyToMany": {
+              "unique_id": "CoursesUcores"
+            }
+          }
+        }
+      ],
+      "data_sources": {}
+    },
+    "Department": {
+      "hash": 1410863614,
+      "name": "Department",
+      "primary_key": {
+        "name": "id",
+        "cidl_type": "Integer"
+      },
+      "attributes": [
+        {
+          "hash": 1153465351,
+          "value": {
+            "name": "name",
+            "cidl_type": "Text"
+          },
+          "foreign_key_reference": null
+        }
+      ],
+      "navigation_properties": [
+        {
+          "hash": 1673879675,
+          "var_name": "courses",
+          "model_name": "Course",
+          "kind": {
+            "ManyToMany": {
+              "unique_id": "CoursesDepartments"
+            }
+          }
+        }
+      ],
+      "data_sources": {}
+    },
+    "UCore": {
+      "hash": 1009695403,
+      "name": "UCore",
+      "primary_key": {
+        "name": "id",
+        "cidl_type": "Integer"
+      },
+      "attributes": [
+        {
+          "hash": 1153465351,
+          "value": {
+            "name": "name",
+            "cidl_type": "Text"
+          },
+          "foreign_key_reference": null
+        }
+      ],
+      "navigation_properties": [
+        {
+          "hash": 3471392441,
+          "var_name": "courses",
+          "model_name": "Course",
+          "kind": {
+            "ManyToMany": {
+              "unique_id": "CoursesUcores"
+            }
+          }
+        }
+      ],
+      "data_sources": {}
+    },
+    "Professor": {
+      "hash": 2648713366,
+      "name": "Professor",
+      "primary_key": {
+        "name": "id",
+        "cidl_type": "Integer"
+      },
+      "attributes": [
+        {
+          "hash": 2789126090,
+          "value": {
+            "name": "departmentId",
+            "cidl_type": "Integer"
+          },
+          "foreign_key_reference": "Department"
+        },
+        {
+          "hash": 1153465351,
+          "value": {
+            "name": "name",
+            "cidl_type": "Text"
+          },
+          "foreign_key_reference": null
+        },
+        {
+          "hash": 57787198,
+          "value": {
+            "name": "cumulative_rating",
+            "cidl_type": "Real"
+          },
+          "foreign_key_reference": null
+        }
+      ],
+      "navigation_properties": [
+        {
+          "hash": 2930368781,
+          "var_name": "ratings",
+          "model_name": "Rating",
+          "kind": {
+            "OneToMany": {
+              "reference": "professorId"
+            }
+          }
+        }
+      ],
+      "data_sources": {}
+    },
+    "Rating": {
+      "hash": 1957809969,
+      "name": "Rating",
+      "primary_key": {
+        "name": "id",
+        "cidl_type": "Integer"
+      },
+      "attributes": [
+        {
+          "hash": 615723549,
+          "value": {
+            "name": "professorId",
+            "cidl_type": "Integer"
+          },
+          "foreign_key_reference": "Professor"
+        },
+        {
+          "hash": 690871092,
+          "value": {
+            "name": "courseId",
+            "cidl_type": "Integer"
+          },
+          "foreign_key_reference": "Course"
+        },
+        {
+          "hash": 1660857050,
+          "value": {
+            "name": "rmp_quality",
+            "cidl_type": "Real"
+          },
+          "foreign_key_reference": null
+        },
+        {
+          "hash": 1489668698,
+          "value": {
+            "name": "rmp_difficulty",
+            "cidl_type": "Real"
+          },
+          "foreign_key_reference": null
+        },
+        {
+          "hash": 2011859432,
+          "value": {
+            "name": "rmp_comment",
+            "cidl_type": "Text"
+          },
+          "foreign_key_reference": null
+        }
+      ],
+      "navigation_properties": [],
+      "data_sources": {}
+    }
+  }
+}
