@@ -1,5 +1,5 @@
 {
-  "hash": 2490769406,
+  "hash": 494473378,
   "models": {
     "Course": {
       "hash": 2772395692,
@@ -121,7 +121,7 @@
       "data_sources": {}
     },
     "Professor": {
-      "hash": 2648713366,
+      "hash": 2825433387,
       "name": "Professor",
       "primary_key": {
         "name": "id",
@@ -137,23 +137,33 @@
           "foreign_key_reference": "Department"
         },
         {
-          "hash": 1153465351,
-          "value": {
-            "name": "name",
-            "cidl_type": "Text"
-          },
-          "foreign_key_reference": null
-        },
-        {
           "hash": 57787198,
           "value": {
             "name": "cumulative_rating",
             "cidl_type": "Real"
           },
           "foreign_key_reference": null
+        },
+        {
+          "hash": 1153465351,
+          "value": {
+            "name": "name",
+            "cidl_type": "Text"
+          },
+          "foreign_key_reference": null
         }
       ],
       "navigation_properties": [
+        {
+          "hash": 2312113521,
+          "var_name": "department",
+          "model_name": "Department",
+          "kind": {
+            "OneToOne": {
+              "reference": "departmentId"
+            }
+          }
+        },
         {
           "hash": 2930368781,
           "var_name": "ratings",
@@ -165,6 +175,50 @@
           }
         }
       ],
+      "data_sources": {}
+    },
+    "ProfessorCourseRating": {
+      "hash": 3990308305,
+      "name": "ProfessorCourseRating",
+      "primary_key": {
+        "name": "id",
+        "cidl_type": "Integer"
+      },
+      "attributes": [
+        {
+          "hash": 615723549,
+          "value": {
+            "name": "professorId",
+            "cidl_type": "Integer"
+          },
+          "foreign_key_reference": "Professor"
+        },
+        {
+          "hash": 690871092,
+          "value": {
+            "name": "courseId",
+            "cidl_type": "Integer"
+          },
+          "foreign_key_reference": "Course"
+        },
+        {
+          "hash": 3014130480,
+          "value": {
+            "name": "rating",
+            "cidl_type": "Real"
+          },
+          "foreign_key_reference": null
+        },
+        {
+          "hash": 3143509857,
+          "value": {
+            "name": "count",
+            "cidl_type": "Integer"
+          },
+          "foreign_key_reference": null
+        }
+      ],
+      "navigation_properties": [],
       "data_sources": {}
     },
     "Rating": {

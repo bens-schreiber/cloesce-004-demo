@@ -14,13 +14,13 @@ import {
 // https://github.com/bens-schreiber/course-advisor/blob/main/backend/scrape/ratemy.py
 const db = new Database("./dist/scrape.db", { readonly: true });
 
-async function safeSave(
+async function queryApi(
   label: string,
-  saveFn: (data: any) => Promise<any>,
+  fn: (data: any) => Promise<any>,
   data: any
 ) {
   try {
-    const res: any = await saveFn(data);
+    const res: any = await fn(data);
     if (!res || res.ok === false) {
       console.error(`❌ Failed to save ${label}:`, data, "\nResponse:", res);
     }
@@ -34,7 +34,7 @@ async function seedDepartments() {
     .prepare("SELECT id, name FROM departments")
     .all();
   for (const d of departments) {
-    await safeSave("department", Department.save, {
+    await queryApi("department", Department.save, {
       id: d.id,
       name: d.name,
       courses: [],
@@ -48,7 +48,7 @@ async function seedUcores() {
     .prepare("SELECT DISTINCT ucore_designation AS name FROM ucore_courses")
     .all();
   for (const u of ucores) {
-    await safeSave("ucore", UCore.save, {
+    await queryApi("ucore", UCore.save, {
       name: u.name,
       courses: [],
     });
@@ -63,7 +63,7 @@ async function seedCourses() {
     )
     .all();
   for (const c of courses) {
-    await safeSave("course", Course.save, {
+    await queryApi("course", Course.save, {
       id: c.id,
       name: c.name,
       credits: 3, // default to 3 credits
@@ -83,7 +83,7 @@ async function seedProfessors() {
     .all();
 
   for (const p of professors) {
-    await safeSave("professor", Professor.save, {
+    await queryApi("professor", Professor.save, {
       id: p.id,
       name: p.name,
       departmentId: p.departmentId,
@@ -106,8 +106,7 @@ async function seedRatings() {
     .all();
 
   for (const r of comments) {
-    await safeSave("rating", Rating.save, {
-      id: r.id,
+    await queryApi("rating", Rating.rate, {
       professorId: r.professorId,
       courseId: r.courseId,
       rmp_quality: r.quality,
