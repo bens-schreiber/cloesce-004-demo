@@ -1,5 +1,5 @@
 {
-  "hash": 494473378,
+  "hash": 3301713175,
   "models": {
     "Course": {
       "hash": 2772395692,
@@ -121,7 +121,7 @@
       "data_sources": {}
     },
     "Professor": {
-      "hash": 2825433387,
+      "hash": 1787968449,
       "name": "Professor",
       "primary_key": {
         "name": "id",
@@ -175,7 +175,15 @@
           }
         }
       ],
-      "data_sources": {}
+      "data_sources": {
+        "default": {
+          "hash": 422274931,
+          "name": "default",
+          "tree": {
+            "department": {}
+          }
+        }
+      }
     },
     "ProfessorCourseRating": {
       "hash": 3990308305,

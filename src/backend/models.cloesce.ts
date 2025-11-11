@@ -11,11 +11,15 @@ import {
   Orm,
   HttpResult,
   Inject,
+  PlainOldObject,
+  IncludeTree,
+  DeepPartial,
+  DataSource,
 } from "cloesce/backend";
 import { Env } from "./app.cloesce";
 
 @D1
-@CRUD(["SAVE"])
+@CRUD(["SAVE", "LIST"])
 export class UCore {
   @PrimaryKey
   id: Integer;
@@ -26,7 +30,7 @@ export class UCore {
 }
 
 @D1
-@CRUD(["SAVE"])
+@CRUD(["SAVE", "LIST"])
 export class Course {
   @PrimaryKey
   id: Integer;
@@ -42,7 +46,7 @@ export class Course {
 }
 
 @D1
-@CRUD(["SAVE"])
+@CRUD(["SAVE", "LIST"])
 export class Department {
   @PrimaryKey
   id: Integer;
@@ -53,7 +57,7 @@ export class Department {
 }
 
 @D1
-@CRUD(["SAVE"])
+@CRUD(["SAVE", "GET"])
 export class Professor {
   @PrimaryKey
   id: Integer;
@@ -67,11 +71,67 @@ export class Professor {
   @OneToMany("professorId")
   ratings: Rating[];
 
-  /**
-   * The cumulative rating gathered from all [ProfessorCourseRating] entries
-   */
+  @OneToMany("professorId")
+  courseRatings: ProfessorCourseRating[];
+
   cumulative_rating: number;
   name: string;
+
+  @DataSource
+  static readonly withRatings: IncludeTree<Professor> = {
+    ratings: {},
+    department: {},
+    courseRatings: {
+      course: {},
+    },
+  };
+
+  // TODO: POST only because Closesce doesn't objects in GET yet
+  @POST
+  static async topProfessors(
+    @Inject env: Env,
+    filterOptions: DeepPartial<TopProfessorFilterOptions>
+  ): Promise<Professor[]> {
+    const includeTree: IncludeTree<Professor> = {
+      courseRatings: {},
+      department: {},
+    };
+
+    const params: any[] = [];
+    const select = Orm.listQuery(Professor, {
+      includeTree,
+    }).unwrap();
+
+    const whereClauses: string[] = [];
+    if (filterOptions.departmentId) {
+      whereClauses.push(`[departmentId] = ?`);
+      params.push(filterOptions.departmentId);
+    }
+    if (filterOptions.courseId) {
+      whereClauses.push(`[courseRatings.courseId] = ?`);
+      params.push(filterOptions.courseId);
+    }
+
+    if (filterOptions.nameLike) {
+      whereClauses.push(`[name] LIKE '%' || ? || '%'`);
+      params.push(filterOptions.nameLike);
+    }
+
+    const sql = `
+      ${select}
+      ${whereClauses.length > 0 ? `WHERE ${whereClauses.join(" AND ")}` : ""}
+      ORDER BY [cumulative_rating] DESC 
+      LIMIT ?
+    `;
+
+    const query = await env.db
+      .prepare(sql)
+      .bind(...params, filterOptions.limit ?? 10)
+      .all();
+
+    return Orm.mapSql(Professor, query.results, includeTree).mapLeft((_) => [])
+      .value;
+  }
 }
 
 /**
@@ -87,6 +147,9 @@ export class ProfessorCourseRating {
 
   @ForeignKey(Course)
   courseId: Integer;
+
+  @OneToOne("courseId")
+  course: Course;
 
   rating: number;
   count: Integer;
@@ -124,6 +187,7 @@ export class Rating {
     const score =
       rating.rmp_quality * 0.5 + (5 - rating.rmp_difficulty) * 0.3 + 5 * 0.2;
 
+    // (TODO: Could simplify if Cloesce allowed composite keys)
     await env.db.batch([
       // Try to update existing row
       env.db
@@ -139,7 +203,6 @@ export class Rating {
         .bind(rating.professorId, rating.courseId, score),
 
       // Insert new row if not exists
-      // (TODO: Could simplify if Cloesce allowed composite keys)
       env.db
         .prepare(
           `
@@ -172,4 +235,12 @@ export class Rating {
 
     return { ok: true, status: 200 };
   }
+}
+
+@PlainOldObject
+export class TopProfessorFilterOptions {
+  limit: Integer;
+  courseId: Integer;
+  departmentId: Integer;
+  nameLike: string;
 }

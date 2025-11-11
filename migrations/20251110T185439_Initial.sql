@@ -56,4 +56,4 @@ CREATE TABLE IF NOT EXISTS "CoursesDepartments" (
 );
 
 --- Cloesce Temporary Table
-CREATE TABLE "_cloesce_tmp" ("path" text PRIMARY KEY, "id" integer NOT NULL);
+CREATE TABLE IF NOT EXISTS "_cloesce_tmp" ("path" text PRIMARY KEY, "id" integer NOT NULL);

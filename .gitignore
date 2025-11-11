@@ -3,3 +3,5 @@ package-lock.json
 .generated
 .wrangler
 dist
+components.d.ts
+env.d.ts

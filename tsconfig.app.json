@@ -1,0 +1,27 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": [
+    "env.d.ts",
+    "src/frontend/src/**/*",
+    "src/frontend/src/**/*.vue",
+    "vite.config.*",
+    "vitest.config.*"
+  ],
+  "exclude": ["src/frontend/src/**/__tests__/*"],
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/frontend/src/*"]
+    },
+
+    "types": ["vite/client", "node"],
+
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowJs": true,
+    "strict": true
+  }
+}
