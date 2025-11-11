@@ -19,7 +19,7 @@ import {
 import { Env } from "./app.cloesce";
 
 @D1
-@CRUD(["SAVE", "LIST"])
+@CRUD(["SAVE"])
 export class UCore {
   @PrimaryKey
   id: Integer;
@@ -100,7 +100,7 @@ export class Professor {
     const params: any[] = [];
     const select = Orm.listQuery(Professor, {
       includeTree,
-    }).unwrap();
+    });
 
     const whereClauses: string[] = [];
     if (filterOptions.departmentId) {
@@ -111,7 +111,6 @@ export class Professor {
       whereClauses.push(`[courseRatings.courseId] = ?`);
       params.push(filterOptions.courseId);
     }
-
     if (filterOptions.nameLike) {
       whereClauses.push(`[name] LIKE '%' || ? || '%'`);
       params.push(filterOptions.nameLike);

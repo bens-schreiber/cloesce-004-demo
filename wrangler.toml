@@ -4,5 +4,7 @@ name = "cloesce-demo"
 
 [[d1_databases]]
 binding = "db"
-database_id = "..."
+database_id = "5598c78b-6fce-49de-b409-085b19fac957"
 database_name = "cloesce_demo"
+
+[vars]

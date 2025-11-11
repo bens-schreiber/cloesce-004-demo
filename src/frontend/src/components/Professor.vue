@@ -9,6 +9,7 @@
       Back
     </v-btn>
 
+    <!-- Professor Details -->
     <v-card class="pa-6 mb-6" elevation="3" v-if="professor">
       <v-row>
         <v-col cols="12" sm="8">
@@ -31,7 +32,8 @@
         </v-col>
       </v-row>
 
-      <!-- NEW SECTION: Add Your Own Rating -->
+
+      <!-- Add rating -->
       <v-divider class="my-4" />
       <h2 class="text-h6 font-weight-bold mb-3">Add Your Rating</h2>
 
@@ -79,6 +81,7 @@
       </v-form>
     </v-card>
 
+    <!-- Ratings -->
     <v-card class="pa-4" elevation="2">
       <template v-if="loading">
         <v-row justify="center" class="my-6">
