@@ -1,5 +1,5 @@
 import { D1Database } from "@cloudflare/workers-types/experimental";
-import { CloesceApp, WranglerEnv } from "cloesce/backend";
+import { CloesceApp, WranglerEnv, HttpResult } from "cloesce/backend";
 
 @WranglerEnv
 export class Env {
@@ -8,14 +8,25 @@ export class Env {
 
 const app = new CloesceApp();
 
-// allow all origins
-app.onResponse(async (request, env: Env, di, response: Response) => {
-  response.headers.set("Access-Control-Allow-Origin", "*");
-  response.headers.set(
+// Preflight
+app.onRequest(async (request: Request, env, di) => {
+  if (request.method === "OPTIONS") {
+    return HttpResult.ok(200, undefined, {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    });
+  }
+});
+
+// attach CORS headers
+app.onResult(async (request, env: Env, di, result: HttpResult) => {
+  result.headers.set("Access-Control-Allow-Origin", "*");
+  result.headers.set(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, OPTIONS"
   );
-  response.headers.set(
+  result.headers.set(
     "Access-Control-Allow-Headers",
     "Content-Type, Authorization"
   );

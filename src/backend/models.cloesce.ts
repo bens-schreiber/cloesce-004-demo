@@ -232,7 +232,7 @@ export class Rating {
         .bind(rating.professorId),
     ]);
 
-    return { ok: true, status: 200 };
+    return HttpResult.ok(200) as HttpResult<void>;
   }
 }
 

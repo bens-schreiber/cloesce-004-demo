@@ -31,7 +31,7 @@
     "@fontsource/roboto": "5.2.7",
     "@mdi/font": "7.4.47",
     "better-sqlite3": "^12.4.1",
-    "cloesce": "^0.0.4-unstable.9",
+    "cloesce": "^0.0.4-unstable.10",
     "vue": "^3.5.21",
     "vue-router": "^4.6.3",
     "vuetify": "^3.10.1",
